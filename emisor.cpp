@@ -51,7 +51,7 @@ int main(){
         printf("%x", proto.CMD);
         getchar(); 
         switch (proto.CMD) {
-            case 1:
+            case '1':
                 printf("\nIngrese el mensaje a enviar (15 caracteres maximo):");
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
@@ -62,7 +62,7 @@ int main(){
                     msg_enviados++;
                 }
                 break;
-            case 2:
+            case '2':
                 printf("\nIngrese el mensaje de texto a enviar (15 caracteres maximo):");
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
@@ -70,7 +70,7 @@ int main(){
                 guardarMensaje((char*)proto.DATA);
                 msg_enviados++;
                 break;
-            case 3:
+            case '3':
                 printf("\nIngrese el nombre del archivo de texto a mostrar:");
                 //scanf(" %[^\n]s", nombre_arch);
                 scanf(" %[^\n]s", proto.DATA);
@@ -79,19 +79,19 @@ int main(){
                 mostrarArchivo(nombre_arch); // *** En realidad el receptor debe ejecutar esta funcion, el mensaje sera nombre del archivo.
                 msg_enviados++;
                 break;
-            case 4:
+            case '4':
                 printf("Mensajes enviados: %d", msg_enviados); // *** Esto tambien debe ir en el receptor.
                 empaquetar(proto);
                 // Ejecutar emisor
                 msg_enviados++;              
                 break;
-            case 5:
+            case '5':
                 empaquetar(proto);
                 // Ejecutar emisor
                 // *** En receptor ejecutar funcion (funcion pendiente);
                 msg_enviados++;                     
                 break;
-            case 6:
+            case '6':
                 crearArchivo();
                 printf("\nIngrese el mensaje a enviar (15 caracteres maximo):");
                 scanf(" %[^\n]s", proto.DATA);
@@ -99,7 +99,7 @@ int main(){
                 // Ejecutar emisor
                 msg_enviados++;
                 break;
-            case 7:
+            case '7':
                 printf("\nComunicacion finalizada");
                 empaquetar(proto);
                 // Ejecutar emisor

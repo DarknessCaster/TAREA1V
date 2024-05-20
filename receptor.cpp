@@ -5,6 +5,10 @@
 
 // VARIABLES GLOBALES
 volatile int nbytes = 0;
+volatile int nbits = 0;
+Protocolo proto;
+bool parity = 0;
+int nones = 0;
 
 // PROTOTIPOS
 bool desempaquetar(Protocolo&proto);
@@ -24,7 +28,7 @@ int main(){
         printf("Unable to start interrupt function\n");
     }
     printf("Delay\n");
-    desempaquetar(proto)
+    desempaquetar(proto);
     while(nbytes < proto.LNG) // NBYTES MENOR A LONGITUD DE DATA??a
         delay(300); 
     switch(proto.CMD){
