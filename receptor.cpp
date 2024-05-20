@@ -9,6 +9,9 @@ volatile int nbits = 0;
 Protocolo proto;
 bool parity = 0;
 int nones = 0;
+bool transmissionStarted = false;
+bool parityError = 0;
+volatile BYTE LNG = 17;
 
 // PROTOTIPOS
 bool desempaquetar(Protocolo&proto);
