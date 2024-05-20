@@ -47,7 +47,7 @@ int main(){
         printf("7. Cerrar programa receptor\n");
         printf("==============================================\n");
         printf("Ingrese la opcion deseada: ");
-        scanf("%d", &proto.CMD);
+        scanf("%c", &proto.CMD);
         printf("%x", proto.CMD);
         getchar(); 
         switch (proto.CMD) {
@@ -66,7 +66,6 @@ int main(){
                 printf("\nIngrese el mensaje de texto a enviar (15 caracteres maximo):");
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
-                // Ejecutar emisor
                 startTransmission();
                 guardarMensaje((char*)proto.DATA);
                 msg_enviados++;
@@ -170,7 +169,6 @@ void mostrarArchivo(char cadena[]){ // Muestra el contenido de un archivo cuyo n
 
 void crearArchivo(){ // Crea un archivo de texto en la carpeta actual a partir de un nombre entregado, si el archivo ya existe devuelve mensaje de error.
     char cadena[25];
-    char aux[15];
     printf("\n Ingrese el nombre del archivo que desea crear: ");
     scanf(" %[^\n]s", cadena);
     FILE *lectura = fopen(strcat((cadena), ".txt"), "r"); // Se concatena el ".txt" al final del nombre entregado e intenta abrir el archivo. 
