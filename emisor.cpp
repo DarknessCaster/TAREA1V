@@ -56,11 +56,12 @@ int main(){
                 printf("\nIngrese el mensaje a enviar (15 caracteres maximo):");
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
-                for(int i = 0; i < 10; i++){ // Para enviar 10 veces?
-                    startTransmission();
-                    while(transmissionStarted)
-                        delay(2000);
-                    msg_enviados++;
+                startTransmission();
+                while(transmissionStarted)
+                    delay(2000);
+                if(msg_enviados == 10){
+                    transmissionStarted = false;
+                    msg_enviados = 0;
                 }
                 break;
             case '2':
@@ -227,6 +228,7 @@ void cb_emisor(void) {
             if (nbytes == proto.LNG+1) {
                 transmissionStarted = false;
                 nbytes = 0;
+                msg_enviados++;
             }
         }
     } 
