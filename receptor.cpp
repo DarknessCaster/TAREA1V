@@ -4,6 +4,7 @@
 #include "protocolo.h"
 
 // VARIABLES GLOBALES
+volatile int nbytes = 0;
 
 // PROTOTIPOS
 bool desempaquetar(Protocolo&proto);
@@ -11,7 +12,35 @@ void procesarBit(bool level);
 void cb_receptor(void);
 
 int main(){
+    //INICIA WIRINGPI
+    if(wiringPiSetup() == -1)
+    exit(1);
 
+    //CONFIGURA PINES DE ENTRADA SALIDA
+    pinMode(RX_PIN, INPUT);
+
+    //CONFIGURA INTERRUPCION PIN CLOCK (PUENTEADO A PIN PWM)
+    if(wiringPiISR(DELAY_PIN_R, INT_EDGE_RISING, &cb_receptor) < 0){
+        printf("Unable to start interrupt function\n");
+    }
+    printf("Delay\n");
+    desempaquetar(proto)
+    while(nbytes < proto.LNG) // NBYTES MENOR A LONGITUD DE DATA??a
+        delay(300); 
+    switch(proto.CMD){
+        case 1:
+            
+            break;
+        case 2:
+            desempaquetar(proto, proto.LNG+2);
+            guardarMensaje((char*)proto.DATA);
+            break;
+        case 3:
+            
+            break;
+        default:
+            break;
+    }
     return 0;
 }
 
