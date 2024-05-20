@@ -14,14 +14,12 @@ int nones = 0; // contador de 1s en el byte enviado
 
 // PROTOTIPOS
 int empaquetar(Protocolo &proto);
-bool desempaquetar(Protocolo&proto); 
 void guardarMensaje(char cadena[]);
 void mostrarArchivo(char cadena[]);
 void crearArchivo();
 int fcs(BYTE * arr, int tam);
 void cb_emisor(void);
 void cb_receptor(void);
-void recibirBytes();
 void startTransmission();
 void procesarBit(bool level);
 
@@ -34,7 +32,7 @@ int main(){
     pinMode(TX_PIN, OUTPUT);
     
     // CONFIGURA INTERRUPCION PIN CLOCK
-    if (wiringPiISR(DELAY_PIN, INT_EDGE_RISING, &cb_emisor) < 0) {
+    if (wiringPiISR(DELAY_PIN_E, INT_EDGE_RISING, &cb_emisor) < 0) {
         printf("No se puede iniciar la función de interrupción\n");
         return -1;
     }
@@ -129,25 +127,6 @@ int empaquetar(Protocolo &proto){
     proto.FCS = fcs(proto.FRAMES, proto.LNG+1);
     proto.FRAMES[proto.LNG+1] = (proto.FCS) & 0xFF;
     return proto.LNG +2;
-}
-
-bool desempaquetar(Protocolo&proto){
-    // if (tam != proto.LNG+2){                            //filtro 1, corrrespondiente al largo total del mensaje
-    //     return false;
-    // }
-    proto.CMD = proto.FRAMES[0] & 0x0F;
-    proto.LNG = ((proto.FRAMES[0] >> 4) & 0x0F);
-    if (proto.LNG > 0 && proto.LNG <= LARGO_DATA){      
-        for(int i = 0; i < proto.LNG; i++){
-            proto.DATA[i] = proto.FRAMES[i+1] & 0xFF;
-        }
-    } 
-    proto.FCS = proto.FRAMES[proto.LNG+1];
-    // int fcs_recibido = fcs(proto.FRAMES, proto.LNG+1);
-    // if (fcs_recibido != proto.FCS){                     //filtro 2, correspondiente a la comparacion de los fcs 
-    //     return false;
-    // } 
-    return true; // Desempaquetado correctamente
 }
 
 void startTransmission(){
@@ -258,42 +237,4 @@ void cb_emisor(void) {
         // Canal en reposo
         digitalWrite(TX_PIN, 1);
     }
-}
-
-void cb_receptor(void){
-  bool level = digitalRead(RX_PIN);
-  //  printf("%d",level);
-  if (transmissionStarted){
-    processBit(level);
-  }
-  else if(level == 0 && !transmissionStarted){
-    transmissionStarted = true;
-    nbits = 1;
-  }
-}
-
-void procesarBit(bool level){
-    if (nbits < 9) { // Si estamos recibiendo uno de los primeros 8 bits de datos
-        proto.FRAMES[nbytes] |= level << (nbits - 1);
-    } 
-    else if (nbits == 9) { // Si estamos recibiendo el bit de paridad
-        parity = level;
-        // Calcular la cantidad de bits 1 en el byte recibido
-        nones = (proto.FRAMES[nbytes] & 0x01) + ((proto.FRAMES[nbytes] & 0x02) >> 1) +
-                ((proto.FRAMES[nbytes] & 0x04) >> 2) + ((proto.FRAMES[nbytes] & 0x08) >> 3) +
-                ((proto.FRAMES[nbytes] & 0x10) >> 4) + ((proto.FRAMES[nbytes] & 0x20) >> 5) +
-                ((proto.FRAMES[nbytes] & 0x40) >> 6) + ((proto.FRAMES[nbytes] & 0x80) >> 7);
-        
-        // Verificar si la paridad recibida coincide con la paridad calculada
-        if (parity != (nones % 2 == 0)) {
-            parityError = true;
-        }
-        
-        // Incrementar el contador de bytes y finalizar la transmisión actual
-        nbytes++;
-        transmissionStarted = false;
-    }
-    
-    // Incrementar el contador de bits
-    nbits++;
 }

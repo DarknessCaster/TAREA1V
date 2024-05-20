@@ -4,7 +4,8 @@
 #define LARGO_DATA 15
 #define TX_PIN 2
 #define RX_PIN 3
-#define DELAY_PIN 23
+#define DELAY_PIN_E 0
+#define DELAY_PIN_R 23
 
 struct Protocolo{
     BYTE CMD; // 4 BITS
