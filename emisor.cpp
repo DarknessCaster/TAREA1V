@@ -61,8 +61,8 @@ int main(){
                 while(transmissionStarted)
                     delay(2000);
                 if(msg_prueba == 10){
-                    transmissionStarted = false;
                     msg_prueba = 0;
+                    break;
                 }
                 break;
             case '2':
@@ -229,8 +229,10 @@ void cb_emisor(void) {
             if (nbytes == proto.LNG+1) {
                 transmissionStarted = false;
                 nbytes = 0;
-                msg_enviados++;
-                msg_prueba;
+                if(proto.CMD == 1){
+                    msg_prueba++;
+                }
+                msg_enviados++; // contador mensajes enviados
             }
         }
     } 
