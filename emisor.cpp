@@ -7,6 +7,7 @@
 // VARIABLES GLOBALES
 Protocolo proto;
 int msg_enviados;
+int msg_prueba;
 char nombre_arch[20];
 bool transmissionStarted = false; // Indica si la transmision empieza o no.
 volatile int nbits = 0; // contador de bits enviados
@@ -59,9 +60,9 @@ int main(){
                 startTransmission();
                 while(transmissionStarted)
                     delay(2000);
-                if(msg_enviados == 10){
+                if(msg_prueba == 10){
                     transmissionStarted = false;
-                    msg_enviados = 0;
+                    msg_prueba = 0;
                 }
                 break;
             case '2':
@@ -229,6 +230,7 @@ void cb_emisor(void) {
                 transmissionStarted = false;
                 nbytes = 0;
                 msg_enviados++;
+                msg_prueba;
             }
         }
     } 
