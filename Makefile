@@ -1,18 +1,18 @@
 all:
-  g++ receptor.cpp -o recibir -lwiringPi
-  g++ emisor.cpp -o enviar -lwiringPi
-  g++ delay.cpp -o clock -lwiringPi
+	g++ receptor.cpp -o recibir -lwiringPi
+	g++ emisor.cpp -o enviar -lwiringPi
+	g++ delay.cpp -o delay -lwiringPi
 
 Enviar:
-  sudo ./enviar
+	sudo ./enviar
 
 Recibir:
-  sudo ./recibir
+	sudo ./recibir
 
 Delay:
-  sudo ./delay &
+	sudo ./delay &
 
 todo:
-  sudo ./delay &
-  sudo ./recibir &
-  sudo ./enviar
+	sudo ./delay &
+	sudo ./recibir &
+	sudo ./enviar
