@@ -72,6 +72,13 @@ int main(){
 }
 
 // IMPLEMENTACIONES
+/*  Nombre de la función: desempaquetar
+ *  Tipo de función: bool
+ *  Parámetros: Protocolo &proto
+ *  Descripción de la función: Esta función desempaqueta el FRAME (data empaquetado) y extrae 
+ *                             el comando, la longitud de datos, los datos y el FCS.
+ *                             Verifica un error del mensaje mediante la comparación del FCS calculado.
+ */
 bool desempaquetar(Protocolo&proto){
     // if (tam != proto.LNG+2){                            //filtro 1, corrrespondiente al largo total del mensaje
     //     return false;
@@ -91,6 +98,12 @@ bool desempaquetar(Protocolo&proto){
     return true; // Desempaquetado correctamente
 }
 
+/*  Nombre de la función: cb_receptor
+ *  Tipo de función: void
+ *  Parámetros: Ninguno.
+ *  Descripción de la función: Función callback del receptor, encargada de leer el estado del pin RX 
+ *                             y procesar los bits recibidos. Inicia la transmisión al detectar un bit de inicio.
+ */
 void cb_receptor(void){
     bool level = digitalRead(RX_PIN);
     //  printf("%d",level);
@@ -103,6 +116,12 @@ void cb_receptor(void){
     }
 }
 
+/*  Nombre de la función: procesarBit
+ *  Tipo de función: void
+ *  Parámetros: bool level.
+ *  Descripción de la función: Esta función procesa cada bit recibido durante la transmisión,
+ *                             desempaquetando los bytes de datos y verificando la paridad.
+ */
 void procesarBit(bool level){
     if (nbits < 9) { // Si estamos recibiendo uno de los primeros 8 bits de datos
         proto.FRAMES[nbytes] |= level << (nbits - 1);
@@ -130,6 +149,13 @@ void procesarBit(bool level){
     nbits++;
 }
 
+/*  Nombre de la función: guardarMensaje
+ *  Tipo de función: void
+ *  Parámetros: char cadena[].
+ *  Descripción de la función: Esta función guarda un mensaje en un archivo llamado "mensajes.txt".
+ *                             Abre el archivo en modo de adición, escribe el mensaje y lo cierra.
+ *                             Si el archivo no existe lo crea.
+ */
 void guardarMensaje(char cadena[]){ // Guarda 
     FILE *archivo;
     // printf("\n La cadena en la funcion es %s", cadena); // Para probar que la cadena este bien en este punto.
@@ -150,6 +176,12 @@ void guardarMensaje(char cadena[]){ // Guarda
         fclose(archivo);
 }
 
+/*  Nombre de la función: crearArchivo
+ *  Tipo de función: void
+ *  Parámetros: char cadena[].
+ *  Descripción de la función: Esta función crea un archivo de texto en la carpeta actual con el nombre proporcionado.
+ *                             Si el archivo ya existe, muestra un mensaje de error. Si no existe, lo crea.
+ */
 void crearArchivo(char cadena[]){ // Crea un archivo de texto en la carpeta actual a partir de un nombre entregado, si el archivo ya existe devuelve mensaje de error.
     FILE *lectura = fopen(strcat((cadena), ".txt"), "r"); // Se concatena el ".txt" al final del nombre entregado e intenta abrir el archivo. 
     if(lectura != NULL){ // Si el intento de apertura del archivo no devuelve NULL significa que si existe.
@@ -160,6 +192,12 @@ void crearArchivo(char cadena[]){ // Crea un archivo de texto en la carpeta actu
     }
 }
 
+/*  Nombre de la función: mostrarArchivo
+ *  Tipo de función: void
+ *  Parámetros: char cadena[].
+ *  Descripción de la función: Esta función muestra el contenido de un archivo cuyo nombre es ingresado por el usuario.
+ *                             Si el archivo no existe, muestra un mensaje de error. Si el archivo existe pero está vacío, indica que está vacío.
+ */
 void mostrarArchivo(char cadena[]){ // Muestra el contenido de un archivo cuyo nombre es ingresado por el usuario, si no existe devuelve mensaje de error.
     char aux[15]; 
     FILE *lectura = fopen(strcat((cadena), ".txt"), "r"); // Se concatena el ".txt" al final del nombre entregado e intenta abrir el archivo. 
