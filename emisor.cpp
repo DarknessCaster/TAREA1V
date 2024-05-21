@@ -28,15 +28,15 @@ int main(){
     if(wiringPiSetup() == -1)
     return -1;
 
-    //CONFIGURA PINES DE ENTRADA SALIDA
-    pinMode(TX_PIN, OUTPUT);
-    
     // CONFIGURA INTERRUPCION PIN CLOCK
     if (wiringPiISR(DELAY_PIN_E, INT_EDGE_RISING, &cb_emisor) < 0) {
         printf("No se puede iniciar la función de interrupción\n");
         return -1;
     }
 
+    //CONFIGURA PINES DE ENTRADA SALIDA
+    pinMode(TX_PIN, OUTPUT);
+    
     //INICIA MENU
     do {
         printf("\n================== MENU ==================\n");
