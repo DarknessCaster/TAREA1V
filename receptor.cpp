@@ -46,14 +46,12 @@ int main(){
             }
             break;
         case '2':
-            error_FCS = desempaquetar(proto);
             guardarMensaje((char*)proto.DATA);
             break;
         case '3':
             mostrarArchivo((char*)proto.DATA);
             break;
         case '4':
-            
             break;
         case '5':
             
