@@ -21,6 +21,7 @@ bool desempaquetar(Protocolo&proto);
 void procesarBit(bool level);
 void cb_receptor(void);
 void guardarMensaje(char cadena[]);
+void crearArchivo(char cadena[]);
 void mostrarArchivo(char cadena[]);
 
 int main(){
@@ -57,7 +58,8 @@ int main(){
             
             break;
         case '6':
-            
+            error_FCS = desempaquetar(proto);
+            crearArchivo((char *)proto.DATA);
             break;
         case '7':
             printf("Cerrando programa...");
@@ -146,6 +148,16 @@ void guardarMensaje(char cadena[]){ // Guarda
             fprintf(archivo, "%c", cadena[i]); // Escribe en el archivo la cadena caracter a caracter.
         }
         fclose(archivo);
+}
+
+void crearArchivo(char cadena[]){ // Crea un archivo de texto en la carpeta actual a partir de un nombre entregado, si el archivo ya existe devuelve mensaje de error.
+    FILE *lectura = fopen(strcat((cadena), ".txt"), "r"); // Se concatena el ".txt" al final del nombre entregado e intenta abrir el archivo. 
+    if(lectura != NULL){ // Si el intento de apertura del archivo no devuelve NULL significa que si existe.
+        printf("\n El archivo %s ya existe en nuestros registros.", cadena);
+    }else{
+        fopen(cadena, "a+");
+        printf("\n El archivo %s fue creado con exito.", cadena);
+    }
 }
 
 void mostrarArchivo(char cadena[]){ // Muestra el contenido de un archivo cuyo nombre es ingresado por el usuario, si no existe devuelve mensaje de error.

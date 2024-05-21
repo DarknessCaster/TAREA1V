@@ -16,7 +16,6 @@ int nones = 0; // contador de 1s en el byte enviado
 
 // PROTOTIPOS
 int empaquetar(Protocolo &proto);
-void crearArchivo(char cadena[]);
 int fcs(BYTE * arr, int tam);
 void cb_emisor(void);
 void startTransmission();
@@ -89,7 +88,6 @@ int main(){
                 msg_enviados++;                     
                 break;
             case '6':
-                crearArchivo();
                 printf("\nIngrese el mensaje a enviar (15 caracteres maximo):");
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
@@ -141,16 +139,6 @@ void mostrarArchivo(char cadena[]){ // Muestra el contenido de un archivo cuyo n
         }
     }
     fclose(lectura);
-}
-
-void crearArchivo(char cadena[]){ // Crea un archivo de texto en la carpeta actual a partir de un nombre entregado, si el archivo ya existe devuelve mensaje de error.
-    FILE *lectura = fopen(strcat((cadena), ".txt"), "r"); // Se concatena el ".txt" al final del nombre entregado e intenta abrir el archivo. 
-    if(lectura != NULL){ // Si el intento de apertura del archivo no devuelve NULL significa que si existe.
-        printf("\n El archivo %s ya existe en nuestros registros.", cadena);
-    }else{
-        fopen(cadena, "a+");
-        printf("\n El archivo %s fue creado con exito.", cadena);
-    }
 }
 
 int fcs(BYTE * arr, int tam){
