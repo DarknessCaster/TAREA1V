@@ -6,8 +6,8 @@
 
 // VARIABLES GLOBALES
 Protocolo proto;
-int msg_enviados;
-int msg_prueba;
+int msg_enviados = 0;
+int msg_prueba = 0;
 char nombre_arch[20];
 bool transmissionStarted = false; // Indica si la transmision empieza o no.
 volatile int nbits = 0; // contador de bits enviados
@@ -80,10 +80,7 @@ int main(){
                     delay(2000);
                 break;
             case '4':
-                printf("Mensajes enviados: %d", msg_enviados); // *** Esto tambien debe ir en el receptor.
-                empaquetar(proto);
-                // Ejecutar emisor
-                msg_enviados++;              
+                printf("Mensajes enviados: %d", msg_enviados); // *** Esto tambien debe ir en el receptor.            
                 break;
             case '5':
                 empaquetar(proto);
