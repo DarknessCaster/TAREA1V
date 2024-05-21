@@ -108,6 +108,14 @@ int main(){
 }
 
 // IMPLEMENTACIONES
+/*  Nombre de la función: empaquetar
+ *  Tipo de función: int
+ *  Parámetros: Protocolo &proto
+ *  Descripción de la función: Esta función empaqueta los datos de la estructura Protocolo.
+ *                             Calcula la longitud de los datos y prepara el paquete (FRAMES)
+ *                             copiando los datos en el campo FRAMES y calcula el campo de verificación de trama (FCS).
+ *                             Luego retorna la longitud total del paquete.
+ */
 int empaquetar(Protocolo &proto){
     // if (proto.LNG + 2 > LARGO_DATA + 2){
     //     return -1;
@@ -120,27 +128,24 @@ int empaquetar(Protocolo &proto){
     return proto.LNG +2;
 }
 
+/*  Nombre de la función: startTransmission
+ *  Tipo de función: void
+ *  Parámetros: Ninguno
+ *  Descripción de la función: Esta función inicia el proceso de transmisión marcando el estado de transmisión como activo. 
+ *                            Es utilizada para comenzar la transmisión de datos desde el emisor.
+ */
 void startTransmission(){
   transmissionStarted = true;
 }
 
-void mostrarArchivo(char cadena[]){ // Muestra el contenido de un archivo cuyo nombre es ingresado por el usuario, si no existe devuelve mensaje de error.
-    char aux[15]; 
-    FILE *lectura = fopen(strcat((cadena), ".txt"), "r"); // Se concatena el ".txt" al final del nombre entregado e intenta abrir el archivo. 
-    if(lectura == NULL){
-        printf("\n El archivo %s no existe en nuestros registros.", cadena);
-    }else if(fgetc(lectura) == EOF){
-        printf("\n El archivo %s existe pero esta vacio.", cadena);
-    }else{
-        printf("\n Contenido de %s:\n", cadena);
-        while(feof(lectura) == 0){ // Mientras que no se halla llegado al final del archivo referenciado por el puntero "lectura" imprime por pantalla cada mensaje en el archivo.
-            fgets(aux, 15, lectura);
-            printf("%s", aux);
-        }
-    }
-    fclose(lectura);
-}
-
+/*  Nombre de la función: fcs
+ *  Tipo de función: int
+ *  Parámetros: BYTE * arr, int tam.
+ *  Descripción de la función: Calcula el numero de bits activos en el FRAME (data empaquetado) 
+ *                             (FCS, por sus siglas en inglés) para un array de bytes dado.
+ *                             Itera sobre cada byte del FRAME y cuenta la cantidad de bits activos en cada byte.
+ *                             Luego retorna el total de bits activos en la trama.
+ */
 int fcs(BYTE * arr, int tam){
     int sum_bits = 0;
     for(int i=0; i<tam; i++){
@@ -151,6 +156,13 @@ int fcs(BYTE * arr, int tam){
     return sum_bits;
 }
 
+/*  Nombre de la función: cb_emisor
+ *  Tipo de función: void
+ *  Parámetros: Ninguno.
+ *  Descripción de la función: Funcion callback del emisor, lo que hace es transmitir bit a bit
+ *                              el FRAME (data empaquetado) a traves de transmision asincrona.
+ *                              Esto es con bit de inicio, data y luego bit de paridad.
+ */
 void cb_emisor(void) {
     if (transmissionStarted) { // Si transmision se inicia...
         // Escribe en el pin TX
