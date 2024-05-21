@@ -70,8 +70,8 @@ int main(){
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
                 startTransmission();
-                guardarMensaje((char*)proto.DATA);
-                msg_enviados++;
+                while(transmissionStarted)
+                    delay(2000);
                 break;
             case '3':
                 printf("\nIngrese el nombre del archivo de texto a mostrar:");

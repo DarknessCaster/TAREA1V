@@ -14,6 +14,7 @@ bool transmissionStarted = false;
 bool parityError = 0;
 volatile BYTE LNG = 17;
 volatile int errores = 0;
+bool error_FCS = true;
 
 // PROTOTIPOS
 bool desempaquetar(Protocolo&proto);
@@ -33,17 +34,22 @@ int main(){
         printf("Unable to start interrupt function\n");
     }
     printf("Delay\n");
-    desempaquetar(proto);
     while(nbytes < proto.LNG) // NBYTES MENOR A LONGITUD DE DATA??a
         delay(300); 
+    proto.CMD = proto.FRAMES[0] & 0x0F;
     switch(proto.CMD){
         case '1':
+            error_FCS = desempaquetar(proto);
+            if (error_FCS == false){
+                
+            }
             for(int i = 0; i<proto.LNG; i++){
                 printf("Byte %d: %d\n", i, proto.DATA[i]);
+            
             }
             break;
         case '2':
-            desempaquetar(proto, proto.LNG+2);
+            error_FCS = desempaquetar(proto);
             guardarMensaje((char*)proto.DATA);
             break;
         case '3':
@@ -81,10 +87,10 @@ bool desempaquetar(Protocolo&proto){
         }
     } 
     proto.FCS = proto.FRAMES[proto.LNG+1];
-    // int fcs_recibido = fcs(proto.FRAMES, proto.LNG+1);
-    // if (fcs_recibido != proto.FCS){                     //filtro 2, correspondiente a la comparacion de los fcs 
-    //     return false;
-    // } 
+    int fcs_recibido = fcs(proto.FRAMES, proto.LNG+1);
+    if (fcs_recibido != proto.FCS){                     //filtro 2, correspondiente a la comparacion de los fcs 
+        return false;
+    } 
     return true; // Desempaquetado correctamente
 }
 
@@ -115,9 +121,7 @@ void procesarBit(bool level){
         // Verificar si la paridad recibida coincide con la paridad calculada
         if (parity != (nones % 2 == 0)) {
             parityError = true;
-            if(parityError == true){
-
-            }
+            errores++;
         }
         
         // Incrementar el contador de bytes y finalizar la transmisión actual
