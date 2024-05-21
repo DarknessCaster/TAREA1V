@@ -106,7 +106,6 @@ int main(){
                 printf("\nComunicacion finalizada");
                 empaquetar(proto);
                 // Ejecutar emisor
-                msg_enviados++;
                 break;
             default:
                 printf("Opción inválida. Por favor, ingrese una opción válida.\n");

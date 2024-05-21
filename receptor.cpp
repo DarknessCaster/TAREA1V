@@ -13,6 +13,7 @@ int nones = 0;
 bool transmissionStarted = false;
 bool parityError = 0;
 volatile BYTE LNG = 17;
+volatile int errores = 0;
 
 // PROTOTIPOS
 bool desempaquetar(Protocolo&proto);
@@ -36,15 +37,30 @@ int main(){
     while(nbytes < proto.LNG) // NBYTES MENOR A LONGITUD DE DATA??a
         delay(300); 
     switch(proto.CMD){
-        case 1:
-            
+        case '1':
+            for(int i = 0; i<proto.LNG; i++){
+                printf("Byte %d: %d\n", i, proto.DATA[i]);
+            }
             break;
-        case 2:
+        case '2':
             desempaquetar(proto, proto.LNG+2);
             guardarMensaje((char*)proto.DATA);
             break;
-        case 3:
+        case '3':
             
+            break;
+        case '4':
+            
+            break;
+        case '5':
+            
+            break;
+        case '6':
+            
+            break;
+        case '7':
+            printf("Cerrando programa...");
+            exit(1);
             break;
         default:
             break;
@@ -76,7 +92,7 @@ void cb_receptor(void){
   bool level = digitalRead(RX_PIN);
   //  printf("%d",level);
   if (transmissionStarted){
-    processBit(level);
+    procesarBit(level);
   }
   else if(level == 0 && !transmissionStarted){
     transmissionStarted = true;
@@ -99,6 +115,9 @@ void procesarBit(bool level){
         // Verificar si la paridad recibida coincide con la paridad calculada
         if (parity != (nones % 2 == 0)) {
             parityError = true;
+            if(parityError == true){
+
+            }
         }
         
         // Incrementar el contador de bytes y finalizar la transmisión actual
