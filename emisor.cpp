@@ -63,7 +63,7 @@ int main(){
                 if(msg_prueba == 10){
                     msg_prueba = 0;
                     break;
-                }
+                }   
                 break;
             case '2':
                 printf("\nIngrese el mensaje de texto a enviar (15 caracteres maximo):");
@@ -229,7 +229,7 @@ void cb_emisor(void) {
             if (nbytes == proto.LNG+1) {
                 transmissionStarted = false;
                 nbytes = 0;
-                if(proto.CMD == 1){
+                if(proto.CMD == '1'){
                     msg_prueba++;
                 }
                 msg_enviados++; // contador mensajes enviados
