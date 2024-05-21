@@ -20,6 +20,7 @@ bool error_FCS = true;
 bool desempaquetar(Protocolo&proto);
 void procesarBit(bool level);
 void cb_receptor(void);
+void guardarMensaje(char cadena[]);
 
 int main(){
     //INICIA WIRINGPI
@@ -131,5 +132,25 @@ void procesarBit(bool level){
     
     // Incrementar el contador de bits
     nbits++;
+}
+
+void guardarMensaje(char cadena[]){ // Guarda 
+    FILE *archivo;
+    // printf("\n La cadena en la funcion es %s", cadena); // Para probar que la cadena este bien en este punto.
+    int aux;
+    archivo = fopen("mensajes.txt", "a+"); // Abre el archivo "mensajes.txt" en la carpeta actual, si no existe lo crea.
+    aux = fgetc(archivo); // Lee el primer caracter del archivo.
+        if(aux != EOF){ // Si el archivo esta vacio su primer caracter sera "EOF". Solo cuando se comienza a escribir en el archivo no es necesario un salto de linea.
+            fseek(archivo, 0, SEEK_END); // Lleva al inicio del archivo, al primer caracter.
+            fprintf(archivo, "\n");
+        }
+    
+        for(int i=0; i<15 ; i++){ // Se hace asi por si hay espacios en la cadena de caracteres, en lugar de solo hacer un fprintf() del string completo.
+            if(strcmp(&cadena[i], "\0") == 0){ // Finaliza la escritura de caracteres en el archivo cuando se llega al final del string.
+                break;
+            }
+            fprintf(archivo, "%c", cadena[i]); // Escribe en el archivo la cadena caracter a caracter.
+        }
+        fclose(archivo);
 }
 

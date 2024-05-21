@@ -16,7 +16,6 @@ int nones = 0; // contador de 1s en el byte enviado
 
 // PROTOTIPOS
 int empaquetar(Protocolo &proto);
-void guardarMensaje(char cadena[]);
 void mostrarArchivo(char cadena[]);
 void crearArchivo();
 int fcs(BYTE * arr, int tam);
@@ -130,26 +129,6 @@ int empaquetar(Protocolo &proto){
 
 void startTransmission(){
   transmissionStarted = true;
-}
-
-void guardarMensaje(char cadena[]){ // Guarda 
-    FILE *archivo;
-    // printf("\n La cadena en la funcion es %s", cadena); // Para probar que la cadena este bien en este punto.
-    int aux;
-    archivo = fopen("mensajes.txt", "a+"); // Abre el archivo "mensajes.txt" en la carpeta actual, si no existe lo crea.
-    aux = fgetc(archivo); // Lee el primer caracter del archivo.
-        if(aux != EOF){ // Si el archivo esta vacio su primer caracter sera "EOF". Solo cuando se comienza a escribir en el archivo no es necesario un salto de linea.
-            fseek(archivo, 0, SEEK_END); // Lleva al inicio del archivo, al primer caracter.
-            fprintf(archivo, "\n");
-        }
-    
-        for(int i=0; i<15 ; i++){ // Se hace asi por si hay espacios en la cadena de caracteres, en lugar de solo hacer un fprintf() del string completo.
-            if(strcmp(&cadena[i], "\0") == 0){ // Finaliza la escritura de caracteres en el archivo cuando se llega al final del string.
-                break;
-            }
-            fprintf(archivo, "%c", cadena[i]); // Escribe en el archivo la cadena caracter a caracter.
-        }
-        fclose(archivo);
 }
 
 void mostrarArchivo(char cadena[]){ // Muestra el contenido de un archivo cuyo nombre es ingresado por el usuario, si no existe devuelve mensaje de error.
