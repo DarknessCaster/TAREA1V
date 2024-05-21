@@ -89,7 +89,6 @@ int main(){
                 msg_enviados++;                     
                 break;
             case '6':
-                crearArchivo();
                 printf("\nIngrese el mensaje a enviar (15 caracteres maximo):");
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
