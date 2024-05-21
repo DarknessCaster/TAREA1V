@@ -59,6 +59,9 @@ int main(){
             
             break;
         case '6':
+            error_FCS = desempaquetar(proto);
+            crear
+            
             
             break;
         case '7':
