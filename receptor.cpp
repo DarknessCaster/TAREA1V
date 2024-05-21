@@ -21,6 +21,7 @@ bool desempaquetar(Protocolo&proto);
 void procesarBit(bool level);
 void cb_receptor(void);
 void guardarMensaje(char cadena[]);
+void mostrarArchivo(char cadena[]);
 
 int main(){
     //INICIA WIRINGPI
@@ -37,16 +38,11 @@ int main(){
     printf("Delay\n");
     while(nbytes < proto.LNG) // NBYTES MENOR A LONGITUD DE DATA??a
         delay(300); 
-    proto.CMD = proto.FRAMES[0] & 0x0F;
+    error_FCS = desempaquetar(proto);
     switch(proto.CMD){
         case '1':
-            error_FCS = desempaquetar(proto);
-            if (error_FCS == false){
-                
-            }
             for(int i = 0; i<proto.LNG; i++){
                 printf("Byte %d: %d\n", i, proto.DATA[i]);
-            
             }
             break;
         case '2':
@@ -54,7 +50,7 @@ int main(){
             guardarMensaje((char*)proto.DATA);
             break;
         case '3':
-            
+            mostrarArchivo((char*)proto.DATA);
             break;
         case '4':
             
@@ -96,15 +92,15 @@ bool desempaquetar(Protocolo&proto){
 }
 
 void cb_receptor(void){
-  bool level = digitalRead(RX_PIN);
-  //  printf("%d",level);
-  if (transmissionStarted){
-    procesarBit(level);
-  }
-  else if(level == 0 && !transmissionStarted){
-    transmissionStarted = true;
-    nbits = 1;
-  }
+    bool level = digitalRead(RX_PIN);
+    //  printf("%d",level);
+    if (transmissionStarted){
+        procesarBit(level);
+    }
+    else if(level == 0 && !transmissionStarted){
+        transmissionStarted = true;
+        nbits = 1;
+    }
 }
 
 void procesarBit(bool level){
@@ -122,7 +118,7 @@ void procesarBit(bool level){
         // Verificar si la paridad recibida coincide con la paridad calculada
         if (parity != (nones % 2 == 0)) {
             parityError = true;
-            errores++;
+            errores++; // Contador de errores de paridad por cada bit
         }
         
         // Incrementar el contador de bytes y finalizar la transmisión actual
@@ -154,3 +150,19 @@ void guardarMensaje(char cadena[]){ // Guarda
         fclose(archivo);
 }
 
+void mostrarArchivo(char cadena[]){ // Muestra el contenido de un archivo cuyo nombre es ingresado por el usuario, si no existe devuelve mensaje de error.
+    char aux[15]; 
+    FILE *lectura = fopen(strcat((cadena), ".txt"), "r"); // Se concatena el ".txt" al final del nombre entregado e intenta abrir el archivo. 
+    if(lectura == NULL){
+        printf("\n El archivo %s no existe en nuestros registros.", cadena);
+    }else if(fgetc(lectura) == EOF){
+        printf("\n El archivo %s existe pero esta vacio.", cadena);
+    }else{
+        printf("\n Contenido de %s:\n", cadena);
+        while(feof(lectura) == 0){ // Mientras que no se halla llegado al final del archivo referenciado por el puntero "lectura" imprime por pantalla cada mensaje en el archivo.
+            fgets(aux, 15, lectura);
+            printf("%s", aux);
+        }
+    }
+    fclose(lectura);
+}

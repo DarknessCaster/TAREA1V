@@ -16,7 +16,6 @@ int nones = 0; // contador de 1s en el byte enviado
 
 // PROTOTIPOS
 int empaquetar(Protocolo &proto);
-void mostrarArchivo(char cadena[]);
 void crearArchivo();
 int fcs(BYTE * arr, int tam);
 void cb_emisor(void);
@@ -74,12 +73,11 @@ int main(){
                 break;
             case '3':
                 printf("\nIngrese el nombre del archivo de texto a mostrar:");
-                //scanf(" %[^\n]s", nombre_arch);
                 scanf(" %[^\n]s", proto.DATA);
                 empaquetar(proto);
-                // Ejecutar emisor
-                mostrarArchivo(nombre_arch); // *** En realidad el receptor debe ejecutar esta funcion, el mensaje sera nombre del archivo.
-                msg_enviados++;
+                startTransmission();
+                while(transmissionStarted)
+                    delay(2000);
                 break;
             case '4':
                 printf("Mensajes enviados: %d", msg_enviados); // *** Esto tambien debe ir en el receptor.
