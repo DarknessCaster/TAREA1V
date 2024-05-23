@@ -1,9 +1,10 @@
 #ifndef PROTOCOLO_H
+
 #define PROTOCOLO_H
 #define BYTE unsigned char
 #define LARGO_DATA 15
-#define TX_PIN 2
-#define RX_PIN 3
+#define TX_PIN 27
+#define RX_PIN 22
 #define DELAY_PIN_E 0
 #define DELAY_PIN_R 23
 

@@ -22,7 +22,7 @@ void startTransmission();
 
 int main(){
     //INICIA WIRINGPI
-    if(wiringPiSetup() == -1)
+    if(wiringPiSetupGpio() == -1) //Gpio para ejecutar el bcm
     return -1;
 
     // CONFIGURA INTERRUPCION PIN CLOCK

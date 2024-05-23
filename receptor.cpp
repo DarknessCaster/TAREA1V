@@ -26,7 +26,7 @@ void mostrarArchivo(char cadena[]);
 
 int main(){
     //INICIA WIRINGPI
-    if(wiringPiSetup() == -1)
+    if(wiringPiSetupGpio() == -1) //Gpio para uso del BCM
     exit(1);
 
     //CONFIGURA PINES DE ENTRADA SALIDA
@@ -68,7 +68,7 @@ int main(){
         default:
             break;
     }
-    return 0;
+return 0;
 }
 
 // IMPLEMENTACIONES
